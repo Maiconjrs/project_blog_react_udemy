@@ -1,21 +1,22 @@
-import "./styles.css";
+import './styles.css';
+import React from 'react';
 
-import { useEffect, useState, useCallback } from "react";
-import { loadPosts } from "../../utils/load-posts";
-import { Posts } from "../../components/Posts";
-import { Button } from "../../components/Button";
-import { Input } from "../../components/TextInput";
+import { useEffect, useState, useCallback } from 'react';
+import { loadPosts } from '../../utils/load-posts';
+import { Posts } from '../../components/Posts';
+import { Button } from '../../components/Button';
+import { Input } from '../../components/TextInput';
 
 export const Home = () => {
   const [posts, setPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [postsPerPage] = useState(10);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
 
   const noMorePosts = page + postsPerPage >= allPosts.length ? true : false;
 
-  const filterdPosts = !!searchValue
+  const filterdPosts = searchValue
     ? allPosts.filter((post) => {
         return post.title.toLowerCase().includes(searchValue.toLowerCase());
       })
@@ -25,10 +26,9 @@ export const Home = () => {
     const postsAndPhotos = await loadPosts();
     setPosts(postsAndPhotos.slice(page, postsPerPage));
     setAllPosts(postsAndPhotos);
-  },[]);
+  }, []);
 
   useEffect(() => {
-    console.log('oi')
     handleLoadPosts(0, postsPerPage);
   }, [handleLoadPosts, postsPerPage]);
 
@@ -54,18 +54,10 @@ export const Home = () => {
       </div>
 
       {filterdPosts.length > 0 && <Posts posts={filterdPosts} />}
-      {filterdPosts.length === 0 && (
-        <p>Não exitem posts relacionados ao termo: {searchValue} </p>
-      )}
+      {filterdPosts.length === 0 && <p>Não exitem posts relacionados ao termo: {searchValue} </p>}
 
       <div className="button-container">
-        {!searchValue && (
-          <Button
-            text="Load more Posts"
-            onClick={loadMorePosts}
-            disabled={noMorePosts}
-          />
-        )}
+        {!searchValue && <Button text="Load more Posts" onClick={loadMorePosts} disabled={noMorePosts} />}
       </div>
     </section>
   );
